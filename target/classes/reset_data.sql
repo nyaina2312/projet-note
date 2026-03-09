@@ -48,32 +48,33 @@ INSERT INTO matiere (nom) VALUES
 ('Français'), 
 ('Anglais');
 
--- Opérateurs
+-- Opérateurs (1=>, 2=<, 3=>=, 4=<=)
 INSERT INTO operateur (operateur) VALUES 
-('+'), 
-('-'), 
-('*'), 
-('/');
+('>'), 
+('<'), 
+('>='), 
+('<=');
 
--- Résolutions
+-- Résolutions (1=Petit/plus petite, 2=Grande/plus grande, 3=Moyenne)
 INSERT INTO resolution (nom) VALUES 
-('Addition'), 
-('Soustraction'), 
-('Multiplication'), 
-('Division');
+('Petit'), 
+('Grande'), 
+('Moyenne');
 
 -- Paramètres (diff = seuil de différence)
+-- idOperateur: 1=> 2=< 3=>= 4=<=
+-- idResolution: 1=Petit 2=Grande 3=Moyenne
 INSERT INTO parametre (idmatiere, diff, idoperateur, idresolution) VALUES 
-(1, 10, 1, 1),  -- Mathématiques: diff=10, op=+, résolution=Addition
-(2, 15, 2, 2),  -- Physique: diff=15, op=-, résolution=Soustraction
-(3, 20, 3, 3),  -- Informatique: diff=20, op=*, résolution=Multiplication
-(4, 5, 1, 1),   -- Français: diff=5, op=+, résolution=Addition
-(5, 8, 4, 4);   -- Anglais: diff=8, op=/, résolution=Division
+(1, 3, 3, 1),   -- Mathématiques: diff=3, op=>=, résolution=Petit
+(2, 5, 2, 1),   -- Physique: diff=5, op=<=, résolution=Petit
+(3, 10, 1, 1),  -- Informatique: diff=10, op=>, résolution=Petit
+(4, 5, 3, 3),   -- Français: diff=5, op=>=, résolution=Moyenne
+(5, 8, 4, 2);   -- Anglais: diff=8, op=<=, résolution=Grande
 
 -- Notes (3 correcteurs pour chaque candidat dans chaque matière)
 INSERT INTO note (note, idcandidat, idmatiere, idcorrecteur) VALUES
--- Dupont (ID 1) - Mathématiques (ID 1)
-(15.50, 1, 1, 1), (16.00, 1, 1, 2), (15.75, 1, 1, 3),
+-- Dupont (ID 1) - Mathématiques (ID 1) - EXEMPLE: 9 et 14, diff=5, param: diff=3, op=3(>=), res=1(Petit)
+(9.00, 1, 1, 1), (14.00, 1, 1, 2), (11.00, 1, 1, 3),
 -- Dupont - Physique (ID 2)
 (14.00, 1, 2, 1), (13.50, 1, 2, 2), (14.25, 1, 2, 3),
 -- Dupont - Informatique (ID 3)

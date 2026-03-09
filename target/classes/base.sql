@@ -63,18 +63,17 @@ INSERT IGNORE INTO candidat (nom) VALUES ('Candidat1'), ('Candidat2');
 
 INSERT IGNORE INTO matiere (nom) VALUES ('JAVA'), ('PHP');
 
-INSERT IGNORE INTO operateur (operateur) VALUES ('<'), ('<='), ('>'), ('>=');
+INSERT IGNORE INTO operateur (operateur) VALUES ('>'), ('<'), ('>='), ('<=');
 
-INSERT IGNORE INTO resolution (nom) VALUES ('Petit'), ('Grand'), ('Moyenne');
+INSERT IGNORE INTO resolution (nom) VALUES ('Petit'), ('Grande'), ('Moyenne');
 
 INSERT IGNORE INTO parametre (idmatiere, diff, idoperateur, idresolution) VALUES 
-(1, 10, 1, 1),
-(2, 15, 2, 2),
-(3, 20, 3, 3);
+(1, 3, 3, 1),  -- Mathématiques: diff=3, op=>=, résolution=Petit (note la plus petite)
+(2, 5, 2, 1);  -- PHP: diff=5, op=<=, résolution=Petit
 
 INSERT IGNORE INTO note (note, idcandidat, idmatiere, idcorrecteur) VALUES
--- JAVA (ID 1)
-(15, 1, 1, 1), (16.00, 1, 1, 2), (15.00, 1, 1, 3),
+-- JAVA (ID 1) - Exemple: 9 et 14, diff=5, param: diff=3, op=3(>=), res=1(Petit) -> 9
+(9.00, 1, 1, 1), (14.00, 1, 1, 2), (11.00, 1, 1, 3),
 (12.00, 2, 1, 1), (13.00, 2, 1, 2), (12.00, 2, 1, 3),
 (14.00, 3, 1, 1), (14.00, 3, 1, 2), (14.00, 3, 1, 3),
 -- PHP (ID 2)
