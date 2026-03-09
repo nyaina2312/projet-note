@@ -39,16 +39,16 @@ public class AdminController {
             stmt.execute("INSERT INTO correcteur (nom) VALUES ('Correcteur 1'), ('Correcteur 2'), ('Correcteur 3')");
             stmt.execute("INSERT INTO candidat (nom) VALUES ('Candidat1'), ('Candidat2')");
             stmt.execute("INSERT INTO matiere (nom) VALUES ('JAVA'), ('PHP')");
-            stmt.execute("INSERT INTO operateur (operateur) VALUES ('<'), ('<='), ('>'), ('>=')");
-            stmt.execute("INSERT INTO resolution (nom) VALUES ('Petit'), ('Grand'), ('Moyenne')");
-            stmt.execute("INSERT INTO parametre (idmatiere, diff, idoperateur, idresolution) VALUES (1, 10, 1, 1), (2, 15, 2, 2)");
+            stmt.execute("INSERT INTO operateur (operateur) VALUES ('>'), ('<'), ('>='), ('<=')");
+            stmt.execute("INSERT INTO resolution (nom) VALUES ('Petit'), ('Grande'), ('Moyenne')");
+            stmt.execute("INSERT INTO parametre (idmatiere, diff, idoperateur, idresolution) VALUES (1, 3, 2, 2), (2, 2, 4, 1)");
             
             stmt.execute("INSERT INTO note (note, idcandidat, idmatiere, idcorrecteur) VALUES " +
-                "(15, 1, 1, 1), (16, 1, 1, 2), (15, 1, 1, 3), " +
-                "(12, 2, 1, 1), (13, 2, 1, 2), (12, 2, 1, 3), " +
+                "(12, 1, 1, 1), (11, 1, 1, 2), (11, 1, 1, 3), " +
+                "(13, 2, 1, 1), (10, 2, 1, 2), (11, 2, 1, 3), " +
                 "(14, 3, 1, 1), (14, 3, 1, 2), (14, 3, 1, 3), " +
-                "(18, 1, 2, 1), (17, 1, 2, 2), (18, 1, 2, 3), " +
-                "(16, 2, 2, 1), (15, 2, 2, 2), (16, 2, 2, 3), " +
+                "(7, 1, 2, 1), (11, 1, 2, 2), (9, 1, 2, 3), " +
+                "(11, 2, 2, 1), (16, 2, 2, 2), (13, 2, 2, 3), " +
                 "(18, 3, 2, 1), (17, 3, 2, 2), (18, 3, 2, 3)");
             
         } catch (Exception e) {
