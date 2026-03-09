@@ -3,27 +3,22 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Résultat du Calcul</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .resultat { 
-            font-size: 24px; 
-            padding: 20px; 
-            background-color: #e8f5e9; 
-            border: 2px solid #4CAF50;
-            margin-top: 20px;
-        }
-        a { color: #2196F3; }
-    </style>
+    <title>Résultat</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 </head>
 <body>
-    <h1>Résultat du Calcul</h1>
-    
-    <div class="resultat">
-        <p><strong>Note finale (Somme des différences):</strong> ${noteFinale}</p>
+    <div class="container">
+        <h1>📊 Résultat du Calcul</h1>
+        
+        <div class="result-box">
+            <h3>Note Finale</h3>
+            <div class="note">${noteFinale}</div>
+            <p>Candidat ID: ${idCandidat} | Matière ID: ${idMatiere}</p>
+        </div>
+        
+        <div class="nav-links">
+            <a href="/notes" class="btn btn-primary">🔄 Nouveau calcul</a>
+        </div>
     </div>
-    
-    <br>
-    <p><a href="/notes">Retour à la liste</a></p>
 </body>
 </html>

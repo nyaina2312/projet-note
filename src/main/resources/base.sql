@@ -59,7 +59,7 @@ CREATE TABLE note (
 -- Insérer des données de test
 INSERT IGNORE INTO correcteur (nom) VALUES ('Correcteur 1'), ('Correcteur 2'), ('Correcteur 3');
 
-INSERT IGNORE INTO candidat (nom) VALUES ('Dupont'), ('Martin'), ('Bernard');
+INSERT IGNORE INTO candidat (nom) VALUES ('Ny aina'), ('Balita'), ('Bema');
 
 INSERT IGNORE INTO matiere (nom) VALUES ('Mathématiques'), ('Physique'), ('Informatique');
 
