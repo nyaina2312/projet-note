@@ -63,9 +63,9 @@ INSERT IGNORE INTO candidat (nom) VALUES ('Ny aina'), ('Balita'), ('Bema');
 
 INSERT IGNORE INTO matiere (nom) VALUES ('Mathématiques'), ('Physique'), ('Informatique');
 
-INSERT IGNORE INTO operateur (operateur) VALUES ('+'), ('-'), ('*'), ('/');
+INSERT IGNORE INTO operateur (operateur) VALUES ('>'), ('<'), ('>='), ('<=');
 
-INSERT IGNORE INTO resolution (nom) VALUES ('Addition'), ('Soustraction'), ('Multiplication');
+INSERT IGNORE INTO resolution (nom) VALUES ('Petit'), ('Grande'), ('Moyenne');
 
 INSERT IGNORE INTO parametre (idmatiere, diff, idoperateur, idresolution) VALUES 
 (1, 10, 1, 1),
