@@ -13,8 +13,8 @@
         
         <form action="/notes/sauvegarder" method="post">
             <div class="form-group">
-                <label for="candidat">👤 Candidat:</label>
-                <select name="candidat.idCandidat" id="candidat" required>
+                <label for="candidatId">👤 Candidat:</label>
+                <select name="candidatId" id="candidatId" required>
                     <option value="">-- Choisir un candidat --</option>
                     <c:forEach var="candidat" items="${candidats}">
                         <option value="${candidat.idCandidat}">${candidat.idCandidat} - ${candidat.nom}</option>
@@ -23,8 +23,8 @@
             </div>
             
             <div class="form-group">
-                <label for="matiere">📚 Matière:</label>
-                <select name="matiere.idMatiere" id="matiere" required>
+                <label for="matiereId">📚 Matière:</label>
+                <select name="matiereId" id="matiereId" required>
                     <option value="">-- Choisir une matière --</option>
                     <c:forEach var="matiere" items="${matieres}">
                         <option value="${matiere.idMatiere}">${matiere.idMatiere} - ${matiere.nom}</option>
@@ -33,8 +33,8 @@
             </div>
             
             <div class="form-group">
-                <label for="correcteur">✏️ Correcteur:</label>
-                <select name="correcteur.idCorrecteur" id="correcteur" required>
+                <label for="correcteurId">✏️ Correcteur:</label>
+                <select name="correcteurId" id="correcteurId" required>
                     <option value="">-- Choisir un correcteur --</option>
                     <c:forEach var="correcteur" items="${correcteurs}">
                         <option value="${correcteur.idCorrecteur}">${correcteur.idCorrecteur} - ${correcteur.nom}</option>

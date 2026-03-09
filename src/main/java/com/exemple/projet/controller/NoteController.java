@@ -55,8 +55,25 @@ public class NoteController {
     
     // Sauvegarder la note
     @PostMapping("/notes/sauvegarder")
-    public String sauvegarderNote(@ModelAttribute Note note) {
-        noteService.saveNote(note);
+    public String sauvegarderNote(
+            @RequestParam Integer candidatId,
+            @RequestParam Integer matiereId,
+            @RequestParam Integer correcteurId,
+            @RequestParam BigDecimal note) {
+        
+        // Récupérer les entités depuis la base de données
+        Candidat candidat = candidatRepository.findById(candidatId).orElse(null);
+        Matiere matiere = matiereRepository.findById(matiereId).orElse(null);
+        Correcteur correcteur = correcteurRepository.findById(correcteurId).orElse(null);
+        
+        // Créer la note
+        Note newNote = new Note();
+        newNote.setCandidat(candidat);
+        newNote.setMatiere(matiere);
+        newNote.setCorrecteur(correcteur);
+        newNote.setNote(note);
+        
+        noteService.saveNote(newNote);
         return "redirect:/notes";
     }
     
