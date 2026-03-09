@@ -40,6 +40,7 @@
         </form>
         
         <div class="nav-links">
+            <a href="/admin/reset" class="btn btn-danger" onclick="return confirm('Voulez-vous réinitialiser toutes les données?')">🔄 Réinitialiser les données</a>
             <a href="/candidats" class="btn btn-info">👥 Gestion Candidats</a>
             <a href="/matieres" class="btn btn-info">📖 Gestion Matières</a>
             <a href="/notes/ajouter" class="btn btn-success">➕ Ajouter une note</a>
