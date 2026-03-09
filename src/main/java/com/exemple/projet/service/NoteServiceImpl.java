@@ -82,7 +82,7 @@ public class NoteServiceImpl implements NoteService {
         }
         
         // Si pas de paramètre défini, retourner la moyenne
-        if (param == null) {
+        if (param == null || param.getOperateur() == null || param.getResolution() == null) {
             return calculerMoyenne(corrections);
         }
         
