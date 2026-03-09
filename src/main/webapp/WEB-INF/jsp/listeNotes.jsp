@@ -25,7 +25,7 @@
             <select name="idCandidat" id="candidat" required>
                 <option value="">-- Choisir un candidat --</option>
                 <c:forEach var="candidat" items="${candidats}">
-                    <option value="${candidat.idCandidat}">${candidat.nom}</option>
+                    <option value="${candidat.idCandidat}">${candidat.idCandidat} - ${candidat.nom}</option>
                 </c:forEach>
             </select>
         </div>
@@ -35,7 +35,7 @@
             <select name="idMatiere" id="matiere" required>
                 <option value="">-- Choisir une matière --</option>
                 <c:forEach var="matiere" items="${matieres}">
-                    <option value="${matiere.idMatiere}">${matiere.nom}</option>
+                    <option value="${matiere.idMatiere}">${matiere.idMatiere} - ${matiere.nom}</option>
                 </c:forEach>
             </select>
         </div>
