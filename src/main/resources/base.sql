@@ -59,13 +59,13 @@ CREATE TABLE note (
 -- Insérer des données de test
 INSERT IGNORE INTO correcteur (nom) VALUES ('Correcteur 1'), ('Correcteur 2'), ('Correcteur 3');
 
-INSERT IGNORE INTO candidat (nom) VALUES ('Ny aina'), ('Balita'), ('Bema');
+INSERT IGNORE INTO candidat (nom) VALUES ('Candidat1'), ('Candidat2');
 
-INSERT IGNORE INTO matiere (nom) VALUES ('Mathématiques'), ('Physique'), ('Informatique');
+INSERT IGNORE INTO matiere (nom) VALUES ('JAVA'), ('PHP');
 
-INSERT IGNORE INTO operateur (operateur) VALUES ('>'), ('<'), ('>='), ('<=');
+INSERT IGNORE INTO operateur (operateur) VALUES ('<'), ('<='), ('>'), ('>=');
 
-INSERT IGNORE INTO resolution (nom) VALUES ('Petit'), ('Grande'), ('Moyenne');
+INSERT IGNORE INTO resolution (nom) VALUES ('Petit'), ('Grand'), ('Moyenne');
 
 INSERT IGNORE INTO parametre (idmatiere, diff, idoperateur, idresolution) VALUES 
 (1, 10, 1, 1),
@@ -73,15 +73,11 @@ INSERT IGNORE INTO parametre (idmatiere, diff, idoperateur, idresolution) VALUES
 (3, 20, 3, 3);
 
 INSERT IGNORE INTO note (note, idcandidat, idmatiere, idcorrecteur) VALUES
--- Mathématiques (ID 1)
-(15.50, 1, 1, 1), (16.00, 1, 1, 2), (15.75, 1, 1, 3),
-(12.00, 2, 1, 1), (13.50, 2, 1, 2), (12.25, 2, 1, 3),
-(14.00, 3, 1, 1), (14.50, 3, 1, 2), (14.25, 3, 1, 3),
--- Physique (ID 2)
-(18.00, 1, 2, 1), (17.50, 1, 2, 2), (18.25, 1, 2, 3),
-(16.00, 2, 2, 1), (15.50, 2, 2, 2), (16.25, 2, 2, 3),
-(18.00, 3, 2, 1), (17.50, 3, 2, 2), (18.25, 3, 2, 3),
--- Informatique (ID 3)
-(10.00, 1, 3, 1), (11.00, 1, 3, 2), (10.50, 1, 3, 3),
-(8.00, 2, 3, 1), (9.00, 2, 3, 2), (8.50, 2, 3, 3),
-(12.00, 3, 3, 1), (13.00, 3, 3, 2), (12.50, 3, 3, 3);
+-- JAVA (ID 1)
+(15, 1, 1, 1), (16.00, 1, 1, 2), (15.00, 1, 1, 3),
+(12.00, 2, 1, 1), (13.00, 2, 1, 2), (12.00, 2, 1, 3),
+(14.00, 3, 1, 1), (14.00, 3, 1, 2), (14.00, 3, 1, 3),
+-- PHP (ID 2)
+(18.00, 1, 2, 1), (17.00, 1, 2, 2), (18.00, 1, 2, 3),
+(16.00, 2, 2, 1), (15.00, 2, 2, 2), (16.00, 2, 2, 3),
+(18.00, 3, 2, 1), (17.00, 3, 2, 2), (18.00, 3, 2, 3);
