@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ import com.exemple.projet.repository.ParametreRepository;
 @Service
 public class NoteServiceImpl implements NoteService {
 
+    private static final Logger logger = LoggerFactory.getLogger(NoteServiceImpl.class);
+
     @Autowired
     private NoteRepository noteRepository;
     
@@ -37,8 +41,11 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public BigDecimal calculerNoteFinale(Integer idCandidat, Integer idMatiere) {
+        logger.info("Calcul note pour candidat={}, matiere={}", idCandidat, idMatiere);
+        
         // Récupérer toutes les notes
         List<Note> toutesLesNotes = noteRepository.findAll();
+        logger.info("Total notes in DB: {}", toutesLesNotes.size());
         List<BigDecimal> corrections = new ArrayList<>();
         
         // Filtrer les notes pour ce candidat et cette matière
@@ -73,8 +80,14 @@ public class NoteServiceImpl implements NoteService {
         
         // Chercher les paramètres pour cette matière
         List<Parametre> parametres = parametreRepository.findAll();
+        logger.info("Total parametres: {}", parametres.size());
         Parametre param = null;
         for (Parametre p : parametres) {
+            logger.info("Parametre: idMatiere={}, diff={}, idOperateur={}, idResolution={}", 
+                p.getMatiere() != null ? p.getMatiere().getIdMatiere() : null,
+                p.getDiff(),
+                p.getOperateur() != null ? p.getOperateur().getIdOperateur() : null,
+                p.getResolution() != null ? p.getResolution().getIdResolution() : null);
             if (p.getMatiere() != null && p.getMatiere().getIdMatiere().equals(idMatiere)) {
                 param = p;
                 break;
