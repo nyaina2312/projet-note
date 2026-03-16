@@ -29,7 +29,7 @@ ALTER TABLE candidat AUTO_INCREMENT = 1;
 -- Correcteurs
 INSERT INTO correcteur (nom) VALUES 
 ('Correcteur 1'), 
-('Correcteur 2'), 
+('Correcteur 2'),
 ('Correcteur 3');
 
 -- Candidats
@@ -59,19 +59,18 @@ INSERT INTO resolution (nom) VALUES
 -- idOperateur: 1=> 2=< 3=>= 4=<=
 -- idResolution: 1=Petit 2=Grande 3=Moyenne
 INSERT INTO parametre (idmatiere, diff, idoperateur, idresolution) VALUES 
-(1, 7, 2, 2),(1, 7, 3, 3),   -- Mathématiques: diff=3, op=<, résolution=Grande
-(2, 2, 4, 1),(2, 2, 1, 2);  -- Physique: diff=2, op=<=, résolution=Petit;   -- Anglais: diff=8, op=<=, résolution=Grande
-
+(1, 3, 2, 2),(1, 3, 3, 3),   
+(2, 4, 4, 1),(2, 4, 1, 2);  
 -- Notes (3 correcteurs pour chaque candidat dans chaque matière)
 INSERT INTO note (note, idcandidat, idmatiere, idcorrecteur) VALUES
 -- Dupont (ID 1) - JAVA
-(15.00, 1, 1, 1), (10.00, 1, 1, 2), (12.00, 1, 1, 3),
+(13.00, 1, 1, 1), (12.00, 1, 1, 2), (8.00, 1, 1, 3),
 -- Dupont - JAVA
-(9.00, 2, 1, 1), (8.00, 2, 1, 2), (11.00, 2, 1, 3),
+(12.00, 2, 1, 1), (10.00, 2, 1, 2), (16.00, 2, 1, 3),
 -- Martin (ID 2) - PHP
-(10.00, 1, 2, 1), (10.00, 1, 2, 2),
+(12.00, 1, 2, 1), (10.00, 1, 2, 2), (15.00, 1, 2, 3),
 -- Martin - PHP
-(13.00, 2, 2, 1), (11.00, 2, 2, 2);
+(10.00, 2, 2, 1), (15.00, 2, 2, 2), (13.00, 2, 2, 3);
 
 I
 -- ============================================

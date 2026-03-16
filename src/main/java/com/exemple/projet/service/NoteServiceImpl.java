@@ -21,6 +21,10 @@ import com.exemple.projet.repository.CandidatRepository;
 import com.exemple.projet.repository.MatiereRepository;
 import com.exemple.projet.repository.NoteRepository;
 import com.exemple.projet.repository.ParametreRepository;
+import com.exemple.projet.repository.OperateurRepository;
+import com.exemple.projet.repository.ResolutionRepository;
+
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -32,7 +36,6 @@ public class NoteServiceImpl implements NoteService {
     
     @Autowired
     private CandidatRepository candidatRepository;
-    
     @Autowired
     private MatiereRepository matiereRepository;
     
@@ -40,6 +43,7 @@ public class NoteServiceImpl implements NoteService {
     private ParametreRepository parametreRepository;
 
     @Override
+    @Transactional
     public BigDecimal calculerNoteFinale(Integer idCandidat, Integer idMatiere) {
         logger.info("Calcul note pour candidat={}, matiere={}", idCandidat, idMatiere);
         
@@ -159,11 +163,13 @@ public class NoteServiceImpl implements NoteService {
     }
     
     @Override
+    @Transactional
     public Note saveNote(Note note) {
         return noteRepository.save(note);
     }
     
     @Override
+    @Transactional
     public List<Note> findAllNotes() {
         return noteRepository.findAll();
     }

@@ -16,15 +16,15 @@ public class Note {
     private BigDecimal note;
     
     // Clés étrangères
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idcandidat")
     private Candidat candidat;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idmatiere")
     private Matiere matiere;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idcorrecteur")
     private Correcteur correcteur;
     

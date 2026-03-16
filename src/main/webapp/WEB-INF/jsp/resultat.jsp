@@ -14,7 +14,7 @@
         
         <div class="note-finale-container">
             <div class="note-finale-label">Note Finale</div>
-            <div class="note-finale-valeur"><fmt:formatNumber value="${noteFinale}" type="NUMBER" integerOnly="true" /></div>
+            <div class="note-finale-valeur"><fmt:formatNumber value="${noteFinale}" pattern="#" /></div>
             <div class="note-details">
                 <p><strong>Candidat ID:</strong> ${idCandidat} | <strong>Matière ID:</strong> ${idMatiere}</p>
             </div>

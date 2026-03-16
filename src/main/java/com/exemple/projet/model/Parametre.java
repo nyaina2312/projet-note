@@ -15,15 +15,15 @@ public class Parametre {
     private Integer diff;
     
     // Clés étrangères
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idmatiere")
     private Matiere matiere;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idoperateur")
     private Operateur operateur;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idresolution")
     private Resolution resolution;
     
