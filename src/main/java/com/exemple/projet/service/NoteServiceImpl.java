@@ -85,21 +85,19 @@ public class NoteServiceImpl implements NoteService {
         // Chercher les paramètres pour cette matière
         List<Parametre> parametres = parametreRepository.findAll();
         logger.info("Total parametres: {}", parametres.size());
-        Parametre param = null;
+        
+        // Filtrer les paramètres pour cette matière
+        List<Parametre> parametresMatiere = new ArrayList<>();
         for (Parametre p : parametres) {
-            logger.info("Parametre: idMatiere={}, diff={}, idOperateur={}, idResolution={}", 
-                p.getMatiere() != null ? p.getMatiere().getIdMatiere() : null,
-                p.getDiff(),
-                p.getOperateur() != null ? p.getOperateur().getIdOperateur() : null,
-                p.getResolution() != null ? p.getResolution().getIdResolution() : null);
             if (p.getMatiere() != null && p.getMatiere().getIdMatiere().equals(idMatiere)) {
-                param = p;
-                break;
+                parametresMatiere.add(p);
             }
         }
         
+        logger.info("Parametres pour matiere {}: {}", idMatiere, parametresMatiere.size());
+        
         // Si pas de paramètre défini, retourner la moyenne
-        if (param == null || param.getOperateur() == null || param.getResolution() == null) {
+        if (parametresMatiere.isEmpty()) {
             return calculerMoyenne(corrections);
         }
         
@@ -114,43 +112,46 @@ public class NoteServiceImpl implements NoteService {
             }
         }
         
-        BigDecimal seuil = new BigDecimal(param.getDiff());
-        int idOperateur = param.getOperateur().getIdOperateur();
-        int idResolution = param.getResolution().getIdResolution();
+        logger.info("DiffMax calculé: {}", diffMax);
         
-        // Vérifier la condition selon l'opérateur
-        boolean conditionVerifiee = false;
-        switch (idOperateur) {
-            case 1: // >
-                conditionVerifiee = diffMax.compareTo(seuil) > 0;
-                break;
-            case 2: // <
-                conditionVerifiee = diffMax.compareTo(seuil) < 0;
-                break;
-            case 3: // >=
-                conditionVerifiee = diffMax.compareTo(seuil) >= 0;
-                break;
-            case 4: // <=
-                conditionVerifiee = diffMax.compareTo(seuil) <= 0;
-                break;
+        // Nouvelle logique : trouver le paramètre avec la plus petite distance à diffMax
+        Parametre meilleurParam = null;
+        BigDecimal plusPetiteDistance = null;
+        
+        for (Parametre p : parametresMatiere) {
+            BigDecimal diffParam = new BigDecimal(p.getDiff());
+            BigDecimal distance = diffMax.subtract(diffParam).abs();
+            
+            logger.info("Parametre diff={}, distance={}", p.getDiff(), distance);
+            
+            if (plusPetiteDistance == null || distance.compareTo(plusPetiteDistance) < 0) {
+                plusPetiteDistance = distance;
+                meilleurParam = p;
+            } else if (distance.compareTo(plusPetiteDistance) == 0) {
+                // En cas d'égalité, prendre le plus petit diff
+                if (meilleurParam != null && diffParam.compareTo(new BigDecimal(meilleurParam.getDiff())) < 0) {
+                    meilleurParam = p;
+                }
+            }
         }
         
-        // Appliquer la résolution selon le résultat
-        if (conditionVerifiee) {
-            // Utiliser la résolution définie
-            switch (idResolution) {
-                case 1: // Petit - la plus petite note
-                    return Collections.min(corrections);
-                case 2: // Grande - la plus grande note
-                    return Collections.max(corrections);
-                case 3: // Moyenne
-                    return calculerMoyenne(corrections);
-                default:
-                    return calculerMoyenne(corrections);
-            }
-        } else {
-            // Condition non vérifiée - retourner la moyenne par défaut
+        if (meilleurParam == null || meilleurParam.getResolution() == null) {
             return calculerMoyenne(corrections);
+        }
+        
+        int idResolution = meilleurParam.getResolution().getIdResolution();
+        logger.info("Meilleur param: diff={}, resolution={}", meilleurParam.getDiff(), idResolution);
+        
+        // Appliquer la résolution trouvée
+        switch (idResolution) {
+            case 1: // Petit - la plus petite note
+                return Collections.min(corrections);
+            case 2: // Grande - la plus grande note
+                return Collections.max(corrections);
+            case 3: // Moyenne
+                return calculerMoyenne(corrections);
+            default:
+                return calculerMoyenne(corrections);
         }
     }
     
