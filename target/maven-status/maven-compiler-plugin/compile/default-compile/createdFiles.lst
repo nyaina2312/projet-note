@@ -7,6 +7,7 @@ com\exemple\projet\controller\MatiereController.class
 com\exemple\projet\repository\ParametreRepository.class
 com\exemple\projet\Application.class
 com\exemple\projet\repository\NoteRepository.class
+com\exemple\projet\controller\AdminController.class
 com\exemple\projet\repository\MatiereRepository.class
 com\exemple\projet\repository\OperateurRepository.class
 com\exemple\projet\model\Matiere.class

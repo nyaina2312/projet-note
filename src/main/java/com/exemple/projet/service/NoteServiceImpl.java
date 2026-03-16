@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ import com.exemple.projet.repository.ParametreRepository;
 @Service
 public class NoteServiceImpl implements NoteService {
 
+    private static final Logger logger = LoggerFactory.getLogger(NoteServiceImpl.class);
+
     @Autowired
     private NoteRepository noteRepository;
     
@@ -37,8 +41,11 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public BigDecimal calculerNoteFinale(Integer idCandidat, Integer idMatiere) {
+        logger.info("Calcul note pour candidat={}, matiere={}", idCandidat, idMatiere);
+        
         // Récupérer toutes les notes
         List<Note> toutesLesNotes = noteRepository.findAll();
+        logger.info("Total notes in DB: {}", toutesLesNotes.size());
         List<BigDecimal> corrections = new ArrayList<>();
         
         // Filtrer les notes pour ce candidat et cette matière
@@ -71,10 +78,16 @@ public class NoteServiceImpl implements NoteService {
             return premiere;
         }
         
-        // Si les notes sont différentes, utiliser les paramètres
+        // Chercher les paramètres pour cette matière
         List<Parametre> parametres = parametreRepository.findAll();
+        logger.info("Total parametres: {}", parametres.size());
         Parametre param = null;
         for (Parametre p : parametres) {
+            logger.info("Parametre: idMatiere={}, diff={}, idOperateur={}, idResolution={}", 
+                p.getMatiere() != null ? p.getMatiere().getIdMatiere() : null,
+                p.getDiff(),
+                p.getOperateur() != null ? p.getOperateur().getIdOperateur() : null,
+                p.getResolution() != null ? p.getResolution().getIdResolution() : null);
             if (p.getMatiere() != null && p.getMatiere().getIdMatiere().equals(idMatiere)) {
                 param = p;
                 break;
@@ -82,7 +95,7 @@ public class NoteServiceImpl implements NoteService {
         }
         
         // Si pas de paramètre défini, retourner la moyenne
-        if (param == null) {
+        if (param == null || param.getOperateur() == null || param.getResolution() == null) {
             return calculerMoyenne(corrections);
         }
         
@@ -98,31 +111,42 @@ public class NoteServiceImpl implements NoteService {
         }
         
         BigDecimal seuil = new BigDecimal(param.getDiff());
+        int idOperateur = param.getOperateur().getIdOperateur();
+        int idResolution = param.getResolution().getIdResolution();
         
-        // Si la différence max est <= au seuil
-        if (diffMax.compareTo(seuil) <= 0) {
-            // Utiliser la résolution (moyenne)
-            return calculerMoyenne(corrections);
-        } else {
-            // Appliquer l'opérateur avec la différence
-            BigDecimal moyenne = calculerMoyenne(corrections);
-            String op = param.getOperateur().getOperateur();
-            
-            switch (op) {
-                case "+":
-                    return moyenne.add(diffMax);
-                case "-":
-                    return moyenne.subtract(diffMax);
-                case "*":
-                    return moyenne.multiply(diffMax);
-                case "/":
-                    if (diffMax.compareTo(BigDecimal.ZERO) != 0) {
-                        return moyenne.divide(diffMax, 2, RoundingMode.HALF_UP);
-                    }
-                    return moyenne;
+        // Vérifier la condition selon l'opérateur
+        boolean conditionVerifiee = false;
+        switch (idOperateur) {
+            case 1: // >
+                conditionVerifiee = diffMax.compareTo(seuil) > 0;
+                break;
+            case 2: // <
+                conditionVerifiee = diffMax.compareTo(seuil) < 0;
+                break;
+            case 3: // >=
+                conditionVerifiee = diffMax.compareTo(seuil) >= 0;
+                break;
+            case 4: // <=
+                conditionVerifiee = diffMax.compareTo(seuil) <= 0;
+                break;
+        }
+        
+        // Appliquer la résolution selon le résultat
+        if (conditionVerifiee) {
+            // Utiliser la résolution définie
+            switch (idResolution) {
+                case 1: // Petit - la plus petite note
+                    return Collections.min(corrections);
+                case 2: // Grande - la plus grande note
+                    return Collections.max(corrections);
+                case 3: // Moyenne
+                    return calculerMoyenne(corrections);
                 default:
-                    return moyenne;
+                    return calculerMoyenne(corrections);
             }
+        } else {
+            // Condition non vérifiée - retourner la moyenne par défaut
+            return calculerMoyenne(corrections);
         }
     }
     

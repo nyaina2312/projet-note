@@ -5,49 +5,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Ajouter une Note</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        form { max-width: 400px; }
-        label { display: block; margin-top: 10px; }
-        input, select { width: 100%; padding: 8px; margin-top: 5px; }
-        button { margin-top: 15px; padding: 10px 20px; background-color: #4CAF50; color: white; border: none; }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 </head>
 <body>
-    <h1>Ajouter une Note</h1>
-    
-    <form action="/notes/sauvegarder" method="post">
-        <label>Candidat:</label>
-        <select name="candidat.idCandidat" required>
-            <option value="">Sélectionner un candidat</option>
-            <c:forEach var="candidat" items="${candidats}">
-                <option value="${candidat.idCandidat}">${candidat.nom}</option>
-            </c:forEach>
-        </select>
+    <div class="container">
+        <h1>➕ Ajouter une Note</h1>
         
-        <label>Matière:</label>
-        <select name="matiere.idMatiere" required>
-            <option value="">Sélectionner une matière</option>
-            <c:forEach var="matiere" items="${matieres}">
-                <option value="${matiere.idMatiere}">${matiere.nom}</option>
-            </c:forEach>
-        </select>
-        
-        <label>Correcteur:</label>
-        <select name="correcteur.idCorrecteur" required>
-            <option value="">Sélectionner un correcteur</option>
-            <c:forEach var="correcteur" items="${correcteurs}">
-                <option value="${correcteur.idCorrecteur}">${correcteur.nom}</option>
-            </c:forEach>
-        </select>
-        
-        <label>Note:</label>
-        <input type="number" step="0.01" name="note" required>
-        
-        <button type="submit">Sauvegarder</button>
-    </form>
-    
-    <br>
-    <a href="/notes">Retour à la liste</a>
+        <form action="/notes/sauvegarder" method="post">
+            <div class="form-group">
+                <label for="candidatId">👤 Candidat:</label>
+                <select name="candidatId" id="candidatId" required>
+                    <option value="">-- Choisir un candidat --</option>
+                    <c:forEach var="candidat" items="${candidats}">
+                        <option value="${candidat.idCandidat}">${candidat.idCandidat} - ${candidat.nom}}}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="matiereId">📚 Matière:</label>
+                <select name="matiereId" id="matiereId" required>
+                    <option value="">-- Choisir une matière --</option>
+                    <c:forEach var="matiere" items="${matieres}">
+                        <option value="${matiere.idMatiere}">${matiere.idMatiere} - ${matiere.nom}}}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="correcteurId">✏️ Correcteur:</label>
+                <select name="correcteurId" id="correcteurId" required>
+                    <option value="">-- Choisir un correcteur --</option>
+                    <c:forEach var="correcteur" items="${correcteurs}">
+                        <option value="${correcteur.idCorrecteur}">${correcteur.idCorrecteur} - ${correcteur.nom}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="note">📝 Note:</label>
+                <input type="number" name="note" id="note" step="0.01" min="0" max="20" required>
+            </div>
+            
+            <div class="nav-links">
+                <button type="submit" class="btn btn-success">💾 Sauvegarder</button>
+                <a href="/notes" class="btn btn-secondary">⬅ Retour</a>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
