@@ -1,0 +1,25 @@
+# Fichiers de dump de base de données
+*.sql
+
+# Fichiers de classe Java compilés
+target/
+
+# Fichiers IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Fichiers de logs
+*.log
+
+# Fichiers temporaires
+*.tmp
+*.bak
+*.swp
+
+# OS fichiers
+.DS_Store
+Thumbs.db
