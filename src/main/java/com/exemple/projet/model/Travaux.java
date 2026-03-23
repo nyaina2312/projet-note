@@ -18,8 +18,8 @@ public class Travaux {
     @JoinColumn(name = "demande_id")
     private Demande demande;
     
-    @Column(name = "testSanitaire")
-    private Boolean testSanitaire;
+    @Column(name = "typeStatut")
+    private String typeStatut;
     
     // ========== GETTERS ET SETTERS ==========
     
@@ -39,11 +39,11 @@ public class Travaux {
         this.demande = demande;
     }
     
-    public Boolean getTestSanitaire() {
-        return testSanitaire;
+    public String getTypeStatut() {
+        return typeStatut;
     }
     
-    public void setTestSanitaire(Boolean testSanitaire) {
-        this.testSanitaire = testSanitaire;
+    public void setTypeStatut(String typeStatut) {
+        this.typeStatut = typeStatut;
     }
 }
