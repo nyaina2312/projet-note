@@ -36,6 +36,13 @@
             <scope>runtime</scope>
         </dependency>
         
+        <!-- PostgreSQL Connector -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
         <!-- JSP Support -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
