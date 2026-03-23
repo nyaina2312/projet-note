@@ -18,8 +18,8 @@ public class Statut {
     @Column(name = "libelle", length = 100)
     private String libelle;
     
-    @Column(name = "testSanitaire")
-    private Boolean testSanitaire;
+    @Column(name = "typeStatut", length = 100)
+    private String typeStatut;
     
     // ========== GETTERS ET SETTERS ==========
     
@@ -39,11 +39,11 @@ public class Statut {
         this.libelle = libelle;
     }
     
-    public Boolean getTestSanitaire() {
-        return testSanitaire;
+    public String getTypeStatut() {
+        return typeStatut;
     }
     
-    public void setTestSanitaire(Boolean testSanitaire) {
-        this.testSanitaire = testSanitaire;
+    public void setTypeStatut(String typeStatut) {
+        this.typeStatut = typeStatut;
     }
 }

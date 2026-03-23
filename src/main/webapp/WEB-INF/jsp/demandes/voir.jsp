@@ -26,7 +26,7 @@
             <p class="statut-actuel">
                 <c:if test="${statutActuel != null}">
                     ${statutActuel.libelle}
-                    <c:if test="${statutActuel.testSanitaire == true}"> (Test Sanitaire)</c:if>
+                    <c:if test="${statutActuel.typeStatut != null}"> (${statutActuel.typeStatut})</c:if>
                 </c:if>
                 <c:if test="${statutActuel == null}">
                     En attente
@@ -39,7 +39,7 @@
                 <select name="statutId" required>
                     <option value="">Sélectionner un statut</option>
                     <c:forEach var="statut" items="${statuts}">
-                        <option value="${statut.id}">${statut.libelle} <c:if test="${statut.testSanitaire == true}">(TS)</c:if></option>
+                        <option value="${statut.id}">${statut.libelle} <c:if test="${statut.typeStatut != null}">(${statut.typeStatut})</c:if></option>
                     </c:forEach>
                 </select>
                 <button type="submit" class="btn btn-primary">Changer le Statut</button>
@@ -62,10 +62,7 @@
                             <td><fmt:formatDate value="${h.dateChangement}" pattern="dd/MM/yyyy HH:mm" /></td>
                             <td>${h.statut.libelle}</td>
                             <td>
-                                <c:if test="${h.statut != null}">
-                                    <c:if test="${h.statut.testSanitaire == true}">Test Sanitaire</c:if>
-                                    <c:if test="${h.statut.testSanitaire == false}">Standard</c:if>
-                                </c:if>
+                                <c:if test="${h.statut != null && h.statut.typeStatut != null}">${h.statut.typeStatut}</c:if>
                             </td>
                         </tr>
                     </c:forEach>

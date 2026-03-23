@@ -54,7 +54,7 @@ public class DemandeServiceImpl implements DemandeService {
             // Créer les travaux automatiquement
             Travaux travaux = new Travaux();
             travaux.setDemande(savedDemande);
-            travaux.setTestSanitaire(false);
+            travaux.setTypeStatut(null);
             travauxRepository.save(travaux);
             
             // Ajouter le statut initial "En attente"
@@ -101,10 +101,10 @@ public class DemandeServiceImpl implements DemandeService {
         if (travauxOpt.isPresent()) {
             Travaux travaux = travauxOpt.get();
             
-            // Mettre à jour le champ testSanitaire dans Travaux
+            // Mettre à jour le champ typeStatut dans Travaux
             Optional<Statut> nouveauStatutOpt = statutRepository.findById(nouveauStatutId);
             if (nouveauStatutOpt.isPresent()) {
-                travaux.setTestSanitaire(nouveauStatutOpt.get().getTestSanitaire());
+                travaux.setTypeStatut(nouveauStatutOpt.get().getTypeStatut());
                 travauxRepository.save(travaux);
                 
                 // Ajouter l'historique
