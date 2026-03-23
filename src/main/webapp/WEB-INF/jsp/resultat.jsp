@@ -10,11 +10,12 @@
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1>🎯 Résultat du Calcul</h1>
         
         <div class="note-finale-container">
             <div class="note-finale-label">Note Finale</div>
-            <div class="note-finale-valeur"><fmt:formatNumber value="${noteFinale}" pattern="#" /></div>
+            <div class="note-finale-valeur"><fmt:formatNumber value="${noteFinale}" type="number" minFractionDigits="2" locale="fr_FR" /></div>
             <div class="note-details">
                 <p><strong>Candidat ID:</strong> ${idCandidat} | <strong>Matière ID:</strong> ${idMatiere}</p>
             </div>

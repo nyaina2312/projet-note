@@ -3,38 +3,35 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Projet Note</title>
+    <title>Gestion des Forages</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>🎓 Gestion des Notes</h1>
+        <h1>Gestion des Forages</h1>
         
         <div class="card">
             <div class="card-title">Bienvenue!</div>
-            <p>Cette application permet de gérer les notes des candidats et de calculer la note finale selon la logique définie.</p>
+            <p>Cette application permet de gérer les demandes de forage et leur statut.</p>
         </div>
         
         <div class="card">
-            <div class="card-title">📋 Fonctionnalités</div>
+            <div class="card-title">Fonctionnalites</div>
             <ul style="margin-left: 20px; line-height: 2;">
-                <li>👥 Gestion des candidats</li>
-                <li>📖 Gestion des matières</li>
-                <li>➕ Ajout des notes par correcteur</li>
-                <li>📊 Calcul automatique de la note finale</li>
+                <li>Gestion des clients</li>
+                <li>Gestion des demandes de forage</li>
+                <li>Suivi du statut des travaux</li>
+                <li>Historique des statuts</li>
             </ul>
         </div>
         
         <div class="nav-links">
-            <a href="/notes" class="btn btn-primary">📊 Calculer la note finale</a>
-            <a href="/notes/ajouter" class="btn btn-success">➕ Ajouter une note</a>
-            <a href="/candidats" class="btn btn-info">👥 Gestion Candidats</a>
-            <a href="/matieres" class="btn btn-info">📖 Gestion Matières</a>
-            <a href="/admin/reset" class="btn btn-danger" onclick="return confirm('Voulez-vous réinitialiser toutes les données?')">🔄 Réinitialiser les données</a>
+            <a href="/clients" class="btn btn-primary">Gestion Clients</a>
+            <a href="/demandes" class="btn btn-success">Gestion Demandes</a>
         </div>
         
         <div class="footer">
-            <p>Projet Spring Boot - Application de gestion de notes</p>
+            <p>Projet Spring Boot - Application de gestion des forages</p>
         </div>
     </div>
 </body>
