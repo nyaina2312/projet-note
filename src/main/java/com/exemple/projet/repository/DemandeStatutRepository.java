@@ -10,6 +10,10 @@ import java.util.Optional;
 @Repository
 public interface DemandeStatutRepository extends JpaRepository<DemandeStatut, Integer> {
     
+    List<DemandeStatut> findByDemandeIdOrderByDateChangementDesc(Integer demandeId);
+    
+    Optional<DemandeStatut> findFirstByDemandeIdOrderByDateChangementDesc(Integer demandeId);
+    
     List<DemandeStatut> findByTravauxIdOrderByDateChangementDesc(Integer travauxId);
     
     Optional<DemandeStatut> findFirstByTravauxIdOrderByDateChangementDesc(Integer travauxId);

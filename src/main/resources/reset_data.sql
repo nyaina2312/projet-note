@@ -1,102 +1,55 @@
--- ============================================
--- SCRIPT DE RÉINITIALISATION DES DONNÉES
--- ============================================
+-- Script de réinitialisation des données et des IDs
+-- Pour PostgreSQL
 
-USE projet_note;
+-- Désactiver les contraintes de clé étrangère temporairement
+SET CONSTRAINTS ALL DEFERRED;
 
--- Supprimer toutes les données dans l'ordre (à cause des clés étrangères)
-DELETE FROM note;
-DELETE FROM parametre;
-DELETE FROM resolution;
-DELETE FROM operateur;
-DELETE FROM matiere;
-DELETE FROM correcteur;
-DELETE FROM candidat;
+-- Supprimer les données dans l'ordre inverse des dépendances
+TRUNCATE TABLE details_devis CASCADE;
+TRUNCATE TABLE demande_statut CASCADE;
+TRUNCATE TABLE travaux CASCADE;
+TRUNCATE TABLE devis CASCADE;
+TRUNCATE TABLE demande CASCADE;
+TRUNCATE TABLE client CASCADE;
+TRUNCATE TABLE type_devis CASCADE;
+TRUNCATE TABLE statut CASCADE;
 
--- Réinitialiser les AUTO_INCREMENT
-ALTER TABLE note AUTO_INCREMENT = 1;
-ALTER TABLE parametre AUTO_INCREMENT = 1;
-ALTER TABLE resolution AUTO_INCREMENT = 1;
-ALTER TABLE operateur AUTO_INCREMENT = 1;
-ALTER TABLE matiere AUTO_INCREMENT = 1;
-ALTER TABLE correcteur AUTO_INCREMENT = 1;
-ALTER TABLE candidat AUTO_INCREMENT = 1;
+-- Réinitialiser les séquences (IDs auto-increment) pour PostgreSQL
+ALTER SEQUENCE client_id_seq RESTART WITH 1;
+ALTER SEQUENCE type_devis_id_seq RESTART WITH 1;
+ALTER SEQUENCE demande_id_seq RESTART WITH 1;
+ALTER SEQUENCE devis_id_seq RESTART WITH 1;
+ALTER SEQUENCE details_devis_id_seq RESTART WITH 1;
+ALTER SEQUENCE statut_id_seq RESTART WITH 1;
+ALTER SEQUENCE travaux_id_seq RESTART WITH 1;
+ALTER SEQUENCE demande_statut_id_seq RESTART WITH 1;
 
--- ============================================
--- INSÉRER LES DONNÉES DE TEST
--- ============================================
+-- Réactiver les contraintes
+SET CONSTRAINTS ALL IMMEDIATE;
 
--- Correcteurs
-INSERT INTO correcteur (nom) VALUES 
-('Correcteur 1'), 
-('Correcteur 2'),
-('Correcteur 3');
+-- Réinsérer les données de base (types de devis et statuts)
+INSERT INTO type_devis (libelle) VALUES 
+('Etude'), 
+('Forage');
 
--- Candidats
-INSERT INTO candidat (nom) VALUES 
-('Candidat 1'), 
-('Candidat2');
+INSERT INTO statut (libelle, typeStatut) VALUES 
+('En attente', 'Initial'),
+('Devis etude cree', 'Etude'),
+('Devis etude accepte', 'Etude'),
+('Devis etude refuse', 'Etude'),
+('Etude terrain en cours', 'Etude'),
+('Eau trouvee', 'Etude'),
+('Eau non trouvee', 'Etude'),
+('Devis forage cree', 'Forage'),
+('Devis forage accepte', 'Forage'),
+('Devis forage refuse', 'Forage'),
+('Forage commence', 'Forage'),
+('Forage termine', 'Forage'),
+('Test sanitaire en cours', 'Test'),
+('Test sanitaire termine', 'Test');
 
--- Matières
-INSERT INTO matiere (nom) VALUES 
-('JAVA'), 
-('PHP');
-
--- Opérateurs (1=>, 2=<, 3=>=, 4=<=)
-INSERT INTO operateur (operateur) VALUES 
-('>'), 
-('<'), 
-('>='), 
-('<=');
-
--- Résolutions (1=Petit/plus petite, 2=Grande/plus grande, 3=Moyenne)
-INSERT INTO resolution (nom) VALUES 
-('Petit'), 
-('Grande'), 
-('Moyenne');
-
--- Paramètres (diff = seuil de différence)
--- idOperateur: 1=> 2=< 3=>= 4=<=
--- idResolution: 1=Petit 2=Grande 3=Moyenne
-INSERT INTO parametre (idmatiere, diff, idoperateur, idresolution) VALUES 
-(1, 3, 2, 2),(1, 3, 3, 3),   
-(2, 4, 4, 1),(2, 4, 1, 2);  
--- Notes (3 correcteurs pour chaque candidat dans chaque matière)
-INSERT INTO note (note, idcandidat, idmatiere, idcorrecteur) VALUES
--- Dupont (ID 1) - JAVA
-(13.00, 1, 1, 1), (12.00, 1, 1, 2), (8.00, 1, 1, 3),
--- Dupont - JAVA
-(12.00, 2, 1, 1), (10.00, 2, 1, 2), (16.00, 2, 1, 3),
--- Martin (ID 2) - PHP
-(12.00, 1, 2, 1), (10.00, 1, 2, 2), (15.00, 1, 2, 3),
--- Martin - PHP
-(10.00, 2, 2, 1), (15.00, 2, 2, 2), (13.00, 2, 2, 3);
-
-I
--- ============================================
--- VÉRIFICATION
--- ============================================
-SELECT '=== CORRECTEURS ===' as '';
-SELECT * FROM correcteur;
-
-SELECT '=== CANDIDATS ===' as '';
-SELECT * FROM candidat;
-
-SELECT '=== MATIÈRES ===' as '';
-SELECT * FROM matiere;
-
-SELECT '=== PARAMÈTRES ===' as '';
-SELECT * FROM parametre;
-
-SELECT '=== NOMBRE DE NOTES ===' as '';
-SELECT COUNT(*) as 'Total notes' FROM note;
-
-SELECT '=== NOTES PAR CANDIDAT ===' as '';
-SELECT c.nom as 'Candidat', m.nom as 'Matière', n.note as 'Note', cor.nom as 'Correcteur'
-FROM note n
-JOIN candidat c ON n.idcandidat = c.idcandidat
-JOIN matiere m ON n.idmatiere = m.idmatiere
-JOIN correcteur cor ON n.idcorrecteur = cor.idcorrecteur
-ORDER BY c.nom, m.nom;
-
-SELECT '=== RÉINITIALISATION TERMINÉE ===' as '';
+-- Réinsérer les clients de test
+INSERT INTO client (nom, contact) VALUES 
+('Randriamats', 'randriamats@example.com'),
+('Rakoto', 'rakoto@example.com'),
+('Rasoa', 'rasoa@example.com');

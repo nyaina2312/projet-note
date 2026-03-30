@@ -16,8 +16,8 @@ public class DemandeStatut {
     private Integer id;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "travaux_id")
-    private Travaux travaux;
+    @JoinColumn(name = "demande_id")
+    private Demande demande;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "statut_id")
@@ -25,6 +25,20 @@ public class DemandeStatut {
     
     @Column(name = "dateChangement")
     private Date dateChangement;
+    
+    // ========== NOUVELLE RELATION AVEC TRAVAUX ==========
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "travaux_id")
+    private Travaux travaux;
+    
+    public Travaux getTravaux() {
+        return travaux;
+    }
+    
+    public void setTravaux(Travaux travaux) {
+        this.travaux = travaux;
+    }
     
     // ========== GETTERS ET SETTERS ==========
     
@@ -36,12 +50,12 @@ public class DemandeStatut {
         this.id = id;
     }
     
-    public Travaux getTravaux() {
-        return travaux;
+    public Demande getDemande() {
+        return demande;
     }
     
-    public void setTravaux(Travaux travaux) {
-        this.travaux = travaux;
+    public void setDemande(Demande demande) {
+        this.demande = demande;
     }
     
     public Statut getStatut() {

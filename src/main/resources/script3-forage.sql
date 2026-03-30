@@ -37,6 +37,8 @@ CREATE TABLE IF NOT EXISTS details_devis (
     id SERIAL PRIMARY KEY,
     devis_id INT NOT NULL REFERENCES devis(id),
     libelle VARCHAR(200) NOT NULL,
+    prixUnitaire DECIMAL(10,2),
+    quantite INT,
     montant DECIMAL(10,2) NOT NULL
 );
 
@@ -57,7 +59,7 @@ CREATE TABLE IF NOT EXISTS travaux (
 -- Table DemandeStatut (historique des statuts)
 CREATE TABLE IF NOT EXISTS demande_statut (
     id SERIAL PRIMARY KEY,
-    travaux_id INT NOT NULL REFERENCES travaux(id),
+    demande_id INT NOT NULL REFERENCES demande(id),
     statut_id INT NOT NULL REFERENCES statut(id),
     dateChangement DATE NOT NULL
 );
@@ -70,13 +72,13 @@ INSERT INTO type_devis (libelle) VALUES
 -- Insertion des statuts (sans accents)
 INSERT INTO statut (libelle, typeStatut) VALUES 
 ('En attente', 'Initial'),
-('Devis etude envoye', 'Etude'),
+('Devis etude cree', 'Etude'),
 ('Devis etude accepte', 'Etude'),
 ('Devis etude refuse', 'Etude'),
 ('Etude terrain en cours', 'Etude'),
 ('Eau trouvee', 'Etude'),
 ('Eau non trouvee', 'Etude'),
-('Devis forage envoye', 'Forage'),
+('Devis forage cree', 'Forage'),
 ('Devis forage accepte', 'Forage'),
 ('Devis forage refuse', 'Forage'),
 ('Forage commence', 'Forage'),

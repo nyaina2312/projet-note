@@ -28,6 +28,7 @@
         <div class="nav-links">
             <a href="/clients" class="btn btn-primary">Gestion Clients</a>
             <a href="/demandes" class="btn btn-success">Gestion Demandes</a>
+            <a href="/devis" class="btn btn-primary">Gestion Devis</a>
         </div>
         
         <div class="footer">
