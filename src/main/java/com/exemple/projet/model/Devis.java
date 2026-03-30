@@ -3,6 +3,7 @@ package com.exemple.projet.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Modèle Devis - Représente un devis pour une demande.
@@ -29,6 +30,9 @@ public class Devis {
     @ManyToOne
     @JoinColumn(name = "type_devis_id")
     private TypeDevis typeDevis;
+    
+    @OneToMany(mappedBy = "devis", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DetailsDevis> detailsDevis;
     
     // ========== GETTERS ET SETTERS ==========
     
@@ -70,5 +74,13 @@ public class Devis {
     
     public void setTypeDevis(TypeDevis typeDevis) {
         this.typeDevis = typeDevis;
+    }
+    
+    public List<DetailsDevis> getDetailsDevis() {
+        return detailsDevis;
+    }
+    
+    public void setDetailsDevis(List<DetailsDevis> detailsDevis) {
+        this.detailsDevis = detailsDevis;
     }
 }

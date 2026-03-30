@@ -14,6 +14,7 @@ import com.exemple.projet.repository.DemandeRepository;
 import com.exemple.projet.repository.DemandeStatutRepository;
 import com.exemple.projet.repository.StatutRepository;
 import com.exemple.projet.repository.TravauxRepository;
+import com.exemple.projet.repository.DevisRepository;
 
 @Service
 public class DemandeServiceImpl implements DemandeService {
@@ -29,6 +30,9 @@ public class DemandeServiceImpl implements DemandeService {
     
     @Autowired
     private StatutRepository statutRepository;
+    
+    @Autowired
+    private DevisRepository devisRepository;
     
     @Override
     public List<Demande> findAll() {
@@ -61,7 +65,7 @@ public class DemandeServiceImpl implements DemandeService {
             Statut statutEnAttente = statutRepository.findById(1).orElse(null);
             if (statutEnAttente != null) {
                 DemandeStatut demandeStatut = new DemandeStatut();
-                demandeStatut.setTravaux(travaux);
+                demandeStatut.setDemande(savedDemande);
                 demandeStatut.setStatut(statutEnAttente);
                 demandeStatut.setDateChangement(new Date());
                 demandeStatutRepository.save(demandeStatut);
@@ -72,8 +76,41 @@ public class DemandeServiceImpl implements DemandeService {
     }
     
     @Override
+    @Transactional
     public void deleteById(Integer id) {
-        demandeRepository.deleteById(id);
+        try {
+            // Supprimer d'abord les Devisassocis  cette demande
+            List<com.exemple.projet.model.Devis> devisList = devisRepository.findByDemandeId(id);
+            for (com.exemple.projet.model.Devis devis : devisList) {
+                // Supprimer les details du devis
+                if (devis.getDetailsDevis() != null) {
+                    for (com.exemple.projet.model.DetailsDevis detail : devis.getDetailsDevis()) {
+                        // Supprimer via le repository
+                    }
+                }
+                // Supprimer le devis
+                devisRepository.delete(devis);
+            }
+            
+            // Supprimer les travaux associs
+            Optional<Travaux> travauxOpt = travauxRepository.findByDemandeId(id);
+            if (travauxOpt.isPresent()) {
+                Travaux travaux = travauxOpt.get();
+                // Supprimer les demandes_statut associs aux travaux
+                List<DemandeStatut> historique = demandeStatutRepository.findByTravauxIdOrderByDateChangementDesc(travaux.getId());
+                for (DemandeStatut ds : historique) {
+                    demandeStatutRepository.delete(ds);
+                }
+                // Supprimer les travaux
+                travauxRepository.delete(travaux);
+            }
+            
+            // Finally, supprimer la demande
+            demandeRepository.deleteById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de la suppression: " + e.getMessage());
+        }
     }
     
     @Override
@@ -109,7 +146,7 @@ public class DemandeServiceImpl implements DemandeService {
                 
                 // Ajouter l'historique
                 DemandeStatut demandeStatut = new DemandeStatut();
-                demandeStatut.setTravaux(travaux);
+                demandeStatut.setDemande(travaux.getDemande());
                 demandeStatut.setStatut(nouveauStatutOpt.get());
                 demandeStatut.setDateChangement(new Date());
                 demandeStatutRepository.save(demandeStatut);

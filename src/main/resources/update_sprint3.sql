@@ -29,3 +29,12 @@ UPDATE statut SET typeStatut = 'Etude' WHERE libelle LIKE 'Eau%';
 UPDATE statut SET typeStatut = 'Forage' WHERE libelle LIKE 'Devis forage%';
 UPDATE statut SET typeStatut = 'Forage' WHERE libelle LIKE 'Forage%';
 UPDATE statut SET typeStatut = 'Test' WHERE libelle LIKE 'Test sanitaire%';
+
+-- Ajouter colonne demande_id à la table demande_statut si elle n'existe pas
+ALTER TABLE demande_statut ADD COLUMN IF NOT EXISTS demande_id INT;
+
+-- Copier les données de travaux_id vers demande_id si nécessaire
+UPDATE demande_statut SET demande_id = (SELECT demande_id FROM travaux WHERE id = demande_statut.travaux_id) WHERE demande_id IS NULL;
+
+-- Rendre la colonne demande_id NOT NULL après la mise à jour
+-- ALTER TABLE demande_statut ALTER COLUMN demande_id SET NOT NULL;

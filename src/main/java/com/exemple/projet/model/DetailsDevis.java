@@ -22,6 +22,12 @@ public class DetailsDevis {
     @Column(name = "libelle", length = 200)
     private String libelle;
     
+    @Column(name = "prixUnitaire", precision = 10, scale = 2)
+    private BigDecimal prixUnitaire;
+    
+    @Column(name = "quantite")
+    private Integer quantite;
+    
     @Column(name = "montant", precision = 10, scale = 2)
     private BigDecimal montant;
     
@@ -57,5 +63,21 @@ public class DetailsDevis {
     
     public void setMontant(BigDecimal montant) {
         this.montant = montant;
+    }
+    
+    public BigDecimal getPrixUnitaire() {
+        return prixUnitaire;
+    }
+    
+    public void setPrixUnitaire(BigDecimal prixUnitaire) {
+        this.prixUnitaire = prixUnitaire;
+    }
+    
+    public Integer getQuantite() {
+        return quantite;
+    }
+    
+    public void setQuantite(Integer quantite) {
+        this.quantite = quantite;
     }
 }
