@@ -51,24 +51,58 @@ public class DemandeServiceImpl implements DemandeService {
     
     @Override
     public Demande save(Demande demande) {
+        System.out.println("DEBUG: save called - demande.id=" + demande.getId());
         Demande savedDemande = demandeRepository.save(demande);
         
-        // Vérifier si c'est une nouvelle demande (pas d'ID avant sauvegarde)
-        if (demande.getId() == null) {
-            // Créer les travaux automatiquement
-            Travaux travaux = new Travaux();
-            travaux.setDemande(savedDemande);
-            travaux.setTypeStatut(null);
-            travauxRepository.save(travaux);
-            
-            // Ajouter le statut initial "En attente"
-            Statut statutEnAttente = statutRepository.findById(1).orElse(null);
-            if (statutEnAttente != null) {
-                DemandeStatut demandeStatut = new DemandeStatut();
-                demandeStatut.setDemande(savedDemande);
-                demandeStatut.setStatut(statutEnAttente);
-                demandeStatut.setDateChangement(new Date());
-                demandeStatutRepository.save(demandeStatut);
+        // Vérifier si c'est une nouvelle demande après sauvegarde
+        if (savedDemande.getId() != null) {
+            // Vérifier si les travaux existent déjà
+            Optional<Travaux> existingTravaux = travauxRepository.findByDemandeId(savedDemande.getId());
+            if (!existingTravaux.isPresent()) {
+                // Créer les travaux automatiquement
+                System.out.println("DEBUG: Creating travaux for demande " + savedDemande.getId());
+                Travaux travaux = new Travaux();
+                travaux.setDemande(savedDemande);
+                travaux.setTypeStatut(null);
+                Travaux savedTravaux = travauxRepository.save(travaux);
+                travauxRepository.flush();
+                
+                // Ajouter le statut initial "En attente"
+                Statut statutEnAttente = statutRepository.findById(1).orElse(null);
+                if (statutEnAttente != null) {
+                    DemandeStatut demandeStatut = new DemandeStatut();
+                    demandeStatut.setDemande(savedDemande);
+                    demandeStatut.setStatut(statutEnAttente);
+                    demandeStatut.setDateChangement(new Date());
+                    demandeStatut.setTravaux(savedTravaux);
+                    demandeStatutRepository.save(demandeStatut);
+                    demandeStatutRepository.flush();
+                    System.out.println("DEBUG: Created DemandeStatut with id=" + demandeStatut.getId());
+                }
+            } else {
+                System.out.println("DEBUG: Travaux already exists for demande " + savedDemande.getId());
+                // Les travaux existent, vérifier s'il y a un DemandeStatut
+                List<DemandeStatut> allStats = demandeStatutRepository.findAll();
+                boolean hasStatut = allStats.stream()
+                    .anyMatch(s -> s.getDemande() != null && s.getDemande().getId().equals(savedDemande.getId()));
+                
+                System.out.println("DEBUG: hasStatut for demande " + savedDemande.getId() + " = " + hasStatut);
+                
+                if (!hasStatut) {
+                    System.out.println("DEBUG: Creating DemandeStatut for existing travaux");
+                    // Créer le statut initial si aucun n'existe
+                    Statut statutEnAttente = statutRepository.findById(1).orElse(null);
+                    if (statutEnAttente != null) {
+                        DemandeStatut demandeStatut = new DemandeStatut();
+                        demandeStatut.setDemande(savedDemande);
+                        demandeStatut.setStatut(statutEnAttente);
+                        demandeStatut.setDateChangement(new Date());
+                        demandeStatut.setTravaux(existingTravaux.get());
+                        demandeStatutRepository.save(demandeStatut);
+                        demandeStatutRepository.flush();
+                        System.out.println("DEBUG: Created DemandeStatut with id=" + demandeStatut.getId());
+                    }
+                }
             }
         }
         
@@ -116,16 +150,17 @@ public class DemandeServiceImpl implements DemandeService {
     @Override
     public Statut getStatutActuel(Integer demandeId) {
         try {
-            Optional<Travaux> travauxOpt = travauxRepository.findByDemandeId(demandeId);
-            if (travauxOpt.isPresent()) {
-                Optional<DemandeStatut> demandeStatutOpt = demandeStatutRepository
-                        .findFirstByTravauxIdOrderByDateChangementDesc(travauxOpt.get().getId());
-                if (demandeStatutOpt.isPresent()) {
-                    return demandeStatutOpt.get().getStatut();
-                }
+            List<DemandeStatut> allStats = demandeStatutRepository.findAll();
+            final Integer demandeIdFinal = demandeId;
+            DemandeStatut lastStatut = allStats.stream()
+                .filter(s -> s.getDemande() != null && s.getDemande().getId().equals(demandeIdFinal))
+                .sorted((s1, s2) -> s2.getDateChangement().compareTo(s1.getDateChangement()))
+                .findFirst()
+                .orElse(null);
+            if (lastStatut != null) {
+                return lastStatut.getStatut();
             }
         } catch (Exception e) {
-            // En cas d'erreur, retourner null
             return null;
         }
         return null;
@@ -149,8 +184,108 @@ public class DemandeServiceImpl implements DemandeService {
                 demandeStatut.setDemande(travaux.getDemande());
                 demandeStatut.setStatut(nouveauStatutOpt.get());
                 demandeStatut.setDateChangement(new Date());
+                demandeStatut.setTravaux(travaux);
                 demandeStatutRepository.save(demandeStatut);
             }
+        }
+    }
+    
+    @Override
+    @Transactional
+    public void changerStatutAvecObservation(Integer demandeId, Integer nouveauStatutId, String observation) {
+        Optional<Travaux> travauxOpt = travauxRepository.findByDemandeId(demandeId);
+        if (travauxOpt.isPresent()) {
+            Travaux travaux = travauxOpt.get();
+            
+            Optional<Statut> nouveauStatutOpt = statutRepository.findById(nouveauStatutId);
+            if (nouveauStatutOpt.isPresent()) {
+                travaux.setTypeStatut(nouveauStatutOpt.get().getTypeStatut());
+                travauxRepository.save(travaux);
+                
+                DemandeStatut demandeStatut = new DemandeStatut();
+                demandeStatut.setDemande(travaux.getDemande());
+                demandeStatut.setStatut(nouveauStatutOpt.get());
+                demandeStatut.setDateChangement(new Date());
+                demandeStatut.setObservation(observation);
+                demandeStatut.setTravaux(travaux);
+                demandeStatutRepository.save(demandeStatut);
+            }
+        }
+    }
+    
+    @Override
+    @Transactional
+    public void ajouterObservation(Integer demandeId, String observation) {
+        System.out.println("DEBUG: ajouterObservation called - demandeId=" + demandeId + ", observation=" + observation);
+        
+        if (observation == null || observation.isEmpty()) {
+            System.out.println("DEBUG: observation is empty, returning");
+            return;
+        }
+        
+        // Trouver la demande
+        Optional<Demande> demandeOpt = demandeRepository.findById(demandeId);
+        if (!demandeOpt.isPresent()) {
+            System.out.println("DEBUG: Demande not found");
+            return;
+        }
+        
+        System.out.println("DEBUG: Demande found with id=" + demandeOpt.get().getId());
+        
+        // Obtenir le dernier statut pour garder le même
+        List<DemandeStatut> allStats = demandeStatutRepository.findAll();
+        System.out.println("DEBUG: Total DemandeStatut count: " + allStats.size());
+        
+        List<DemandeStatut> statsForDemande = allStats.stream()
+            .filter(s -> s.getDemande() != null && s.getDemande().getId().equals(demandeId))
+            .sorted((s1, s2) -> s2.getDateChangement().compareTo(s1.getDateChangement()))
+            .collect(java.util.stream.Collectors.toList());
+        
+        System.out.println("DEBUG: statsForDemande count: " + statsForDemande.size());
+        
+        // Créer une NOUVELLE ligne avec le dernier statut et la nouvelle observation
+        Statut statut = null;
+        if (!statsForDemande.isEmpty()) {
+            statut = statsForDemande.get(0).getStatut();
+            System.out.println("DEBUG: Using existing statut: " + statut.getLibelle());
+        } else {
+            statut = statutRepository.findById(1).orElse(null); // En attente par défaut
+            System.out.println("DEBUG: No existing statut, using default 'En attente'");
+        }
+        
+        // Trouver ou créer les travaux
+        List<Travaux> travauxList = travauxRepository.findAll();
+        System.out.println("DEBUG: Total travaux count: " + travauxList.size());
+        
+        Optional<Travaux> travauxOpt = travauxList.stream()
+            .filter(t -> t.getDemande() != null && t.getDemande().getId().equals(demandeId))
+            .findFirst();
+        
+        Travaux travaux;
+        if (travauxOpt.isPresent()) {
+            travaux = travauxOpt.get();
+            System.out.println("DEBUG: Using existing travaux id=" + travaux.getId());
+        } else {
+            System.out.println("DEBUG: Creating new travaux");
+            travaux = new Travaux();
+            travaux.setDemande(demandeOpt.get());
+            travaux.setTypeStatut(null);
+            travaux = travauxRepository.save(travaux);
+        }
+        
+        // Créer une NOUVELLE entrée dans l'historique
+        if (statut != null) {
+            DemandeStatut newStatut = new DemandeStatut();
+            newStatut.setDemande(demandeOpt.get());
+            newStatut.setStatut(statut);
+            newStatut.setDateChangement(new Date());
+            newStatut.setObservation(observation);
+            newStatut.setTravaux(travaux);
+            demandeStatutRepository.save(newStatut);
+            demandeStatutRepository.flush();
+            System.out.println("DEBUG: Created new DemandeStatut with observation");
+        } else {
+            System.out.println("DEBUG: statut is null, cannot create DemandeStatut");
         }
     }
 }

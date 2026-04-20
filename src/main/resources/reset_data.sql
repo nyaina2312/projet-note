@@ -34,19 +34,10 @@ INSERT INTO type_devis (libelle) VALUES
 
 INSERT INTO statut (libelle, typeStatut) VALUES 
 ('En attente', 'Initial'),
-('Devis etude cree', 'Etude'),
-('Devis etude accepte', 'Etude'),
-('Devis etude refuse', 'Etude'),
-('Etude terrain en cours', 'Etude'),
-('Eau trouvee', 'Etude'),
-('Eau non trouvee', 'Etude'),
-('Devis forage cree', 'Forage'),
-('Devis forage accepte', 'Forage'),
-('Devis forage refuse', 'Forage'),
-('Forage commence', 'Forage'),
-('Forage termine', 'Forage'),
-('Test sanitaire en cours', 'Test'),
-('Test sanitaire termine', 'Test');
+('Valide', 'T'),
+('Annule', 'T'),
+('En cours', 'T'),
+('Termine', 'T');
 
 -- Réinsérer les clients de test
 INSERT INTO client (nom, contact) VALUES 

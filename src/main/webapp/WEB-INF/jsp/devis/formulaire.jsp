@@ -53,30 +53,41 @@
                 calculerMontantTotal();
             });
             
-            // Calculer le montant quand on change le prix ou la quantité
-            $('#detailsTable').on('input', '.prix-unitaire, .quantite', function() {
-                var row = $(this).closest('tr');
-                var prix = parseFloat(row.find('.prix-unitaire').val().replace(',', '.')) || 0;
-                var qte = parseInt(row.find('.quantite').val()) || 0;
-                var montant = prix * qte;
-                row.find('.montant').val(montant.toFixed(2));
-                calculerMontantTotal();
+            //
+            $('#detailsTable').on('input', '.prix-unitaire, .quantite', function() { // Écoute les changements sur les champs prix et quantité
+                var row = $(this).closest('tr');                           // Récupère la ligne <tr> parente du champ modifié
+                var prixSaisi = parseFloat(row.find('.prix-unitaire').val().replace(',', '.')) || 0; // Lit le prix saisi, remplace virgule par point, convertit en nombre (0 si vide)
+                var qte = parseInt(row.find('.quantite').val()) || 0;      // Lit la quantité saisie, convertit en entier (0 si vide)
+                var prix = prixSaisi;                                      // Copie le prix saisi dans une variable qu'on pourra modifier
+
+                if (prixSaisi >= 1000000) {                                // Si le prix saisi est >= 1 000 000 Ar
+                    prix = prixSaisi * 0.9;                                // Applique la réduction de 10% (ex: 1 500 000 → 1 350 000)
+                    row.find('.montant').css('color', '#00b894');          // Colore le montant en vert pour indiquer la réduction
+                } else {                                                   // Sinon (prix < 1 000 000)
+                    row.find('.montant').css('color', '#e0e6ed');          // Couleur normale (blanc/gris clair)
+                }
+
+                var montant = prix * qte;                                  // Calcule le montant de la ligne : prix effectif × quantité
+                row.find('.montant').val(montant.toFixed(2));              // Affiche le montant avec 2 décimales dans le champ readonly
+                calculerMontantTotal();                                    // Recalcule le montant total du devis (somme de toutes les lignes)
             });
             
-            // Calculer le montant total
-            function calculerMontantTotal() {
-                var total = 0;
-                $('#detailsTableBody tr').each(function() {
-                    var montant = parseFloat($(this).find('.montant').val()) || 0;
-                    total += montant;
+            // === Calculer le montant total du devis ===
+            // Parcourt toutes les lignes du tableau et additionne les montants
+            function calculerMontantTotal() {                             
+                var total = 0;                                             // Initialise le total à 0
+                $('#detailsTableBody tr').each(function() {                 // Boucle sur chaque ligne <tr> du tbody
+                    var montant = parseFloat($(this).find('.montant').val()) || 0; // Lit le montant de la ligne, convertit en nombre (0 si vide)
+                    total += montant;                                      // Ajoute ce montant au total
                 });
-                $('#montantTotal').text(total.toFixed(2) + ' Ar');
+                $('#montantTotal').text(total.toFixed(2) + ' Ar');          // Affiche le total avec 2 décimales dans le span #montantTotal
             }
         });
     </script>
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1><c:if test="${not empty devis && devis.id > 0}">Modifier un Devis</c:if><c:if test="${empty devis || empty devis.id}">Ajouter un Devis</c:if></h1>
         
         <c:if test="${not empty error}">

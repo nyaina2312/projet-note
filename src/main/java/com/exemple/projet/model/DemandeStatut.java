@@ -23,8 +23,11 @@ public class DemandeStatut {
     @JoinColumn(name = "statut_id")
     private Statut statut;
     
-    @Column(name = "dateChangement")
+    @Column(name = "datechangement")
     private Date dateChangement;
+    
+    @Column(name = "observation", length = 500)
+    private String observation;
     
     // ========== NOUVELLE RELATION AVEC TRAVAUX ==========
     
@@ -72,5 +75,13 @@ public class DemandeStatut {
     
     public void setDateChangement(Date dateChangement) {
         this.dateChangement = dateChangement;
+    }
+    
+    public String getObservation() {
+        return observation;
+    }
+    
+    public void setObservation(String observation) {
+        this.observation = observation;
     }
 }

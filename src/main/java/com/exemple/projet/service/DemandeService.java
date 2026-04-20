@@ -13,4 +13,6 @@ public interface DemandeService {
     void deleteById(Integer id);
     Statut getStatutActuel(Integer demandeId);
     void changerStatut(Integer demandeId, Integer nouveauStatutId);
+    void changerStatutAvecObservation(Integer demandeId, Integer nouveauStatutId, String observation);
+    void ajouterObservation(Integer demandeId, String observation);
 }

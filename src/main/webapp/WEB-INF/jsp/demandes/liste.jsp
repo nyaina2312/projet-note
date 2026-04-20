@@ -10,6 +10,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1>Liste des Demandes de Forage</h1>
         
         <a href="/demandes/ajouter" class="btn btn-primary">Ajouter une Demande</a>
@@ -50,7 +51,9 @@
                         <td>
                             <a href="/demandes/voir?id=${demande.id}" class="btn btn-sm">Voir</a>
                             <a href="/demandes/modifier?id=${demande.id}" class="btn btn-sm">Modifier</a>
-                            <a href="/demandes/supprimer?id=${demande.id}" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette demande?')">Supprimer</a>
+                            <button type="button" class="btn btn-sm" onclick="changerStatutAvecObservation(${demande.id}, 2, 'Validé')">Confirmer</button>
+                            <button type="button" class="btn btn-sm" onclick="changerStatutAvecObservation(${demande.id}, 5, 'Terminé')">Terminé</button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="supprimerDemande(${demande.id})">Supprimer</button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -59,5 +62,36 @@
         
         <a href="/" class="btn btn-secondary">Retour à l'accueil</a>
     </div>
+    
+    <form id="changerStatutForm" method="POST" action="/demandes/changerStatut" style="display:none;">
+        <input type="hidden" name="id" id="demandeId">
+        <input type="hidden" name="statutId" id="statutId">
+        <input type="hidden" name="observation" id="observation">
+    </form>
+    
+    <form id="supprimerForm" method="POST" action="/demandes/supprimer" style="display:none;">
+        <input type="hidden" name="id" id="supprimerDemandeId">
+    </form>
+    
+    <script>
+    function changerStatutAvecObservation(id, statutId, actionParDefaut) {
+        var observation = prompt(' observation (justification):', actionParDefaut);
+        if (observation == null || observation.trim() == '') {
+            observation = actionParDefaut;
+        }
+        document.getElementById('demandeId').value = id;
+        document.getElementById('statutId').value = statutId;
+        document.getElementById('observation').value = observation;
+        console.log("Submitting - id: " + id + ", statutId: " + statutId + ", observation: " + observation);
+        document.getElementById('changerStatutForm').submit();
+    }
+    
+    function supprimerDemande(id) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette demande ?')) {
+            document.getElementById('supprimerDemandeId').value = id;
+            document.getElementById('supprimerForm').submit();
+        }
+    }
+    </script>
 </body>
 </html>
