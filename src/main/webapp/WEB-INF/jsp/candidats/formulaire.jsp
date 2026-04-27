@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1><c:if test="${candidat.idCandidat == null}">➕ Ajouter</c:if><c:if test="${candidat.idCandidat != null}">✏️ Modifier</c:if> un candidat</h1>
         
         <form action="/candidats/sauvegarder" method="post">

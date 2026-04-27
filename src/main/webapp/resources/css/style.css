@@ -223,6 +223,16 @@ select option {
     font-size: 15px;
     font-family: inherit;
     letter-spacing: 0.5px;
+    background: #1e3a5f;
+    color: #74b9ff;
+    border: 1px solid #0984e3;
+}
+
+.btn:hover {
+    background: #0984e3;
+    color: white;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(9, 132, 227, 0.4);
 }
 
 .btn-primary {
@@ -259,14 +269,14 @@ select option {
 }
 
 .btn-danger {
-    background: #d63031;
+    background: #0097e6;
     color: white;
 }
 
 .btn-danger:hover {
-    background: #e17055;
+    background: #00a8ff;
     transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(214, 48, 49, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 151, 230, 0.4);
 }
 
 .btn-info {
@@ -292,9 +302,9 @@ select option {
 }
 
 .btn-sm {
-    padding: 12px 20px;
-    font-size: 13px;
-    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 12px;
+    border-radius: 10px;
 }
 
 /* Tables */
@@ -629,4 +639,55 @@ tbody tr:last-child td {
 
 .mb-20 {
     margin-bottom: 20px;
+}
+
+/* Actions cell - align buttons */
+td .btn {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 2px;
+}
+
+/* Modal */
+#modifierModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #141c3c;
+    padding: 30px;
+    border-radius: 18px;
+    border: 2px solid #00a8ff;
+    width: 400px;
+    max-width: 90%;
+}
+
+.modal-content h3 {
+    color: #00d4ff;
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    color: #00d4ff;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #1e2a4a;
+    border-radius: 10px;
+    background: #0d1226;
+    color: #e0e6ed;
 }

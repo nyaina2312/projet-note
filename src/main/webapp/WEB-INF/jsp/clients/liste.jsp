@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1>Liste des Clients</h1>
         
         <a href="/clients/ajouter" class="btn btn-primary">Ajouter un Client</a>

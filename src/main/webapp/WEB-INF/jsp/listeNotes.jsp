@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1>📊 Calcul de la Note Finale</h1>
         
         <p class="text-center">Sélectionnez un candidat et une matière pour calculer la note finale.</p>

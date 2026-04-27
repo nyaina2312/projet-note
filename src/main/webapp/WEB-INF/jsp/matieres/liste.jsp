@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1>📚 Liste des Matières</h1>
         
         <div class="nav-links mb-20">
