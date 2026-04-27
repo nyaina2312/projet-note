@@ -28,7 +28,13 @@ public class DemandeStatut {
     
     @Column(name = "observation", length = 500)
     private String observation;
-    
+
+    @Column(name = "duree_totale_heures")
+    private Double dureeTotaleHeures;
+
+    @Column(name = "duree_ouvrable_heures")
+    private Double dureeOuvrableHeures;
+
     // ========== NOUVELLE RELATION AVEC TRAVAUX ==========
     
     @ManyToOne(fetch = FetchType.EAGER)
@@ -83,5 +89,45 @@ public class DemandeStatut {
     
     public void setObservation(String observation) {
         this.observation = observation;
+    }
+
+    public String getSource() {
+        return travaux != null ? travaux.getTypeStatut() : null;
+    }
+
+    public Double getDureeTotaleHeures() {
+        return dureeTotaleHeures;
+    }
+
+    public void setDureeTotaleHeures(Double dureeTotaleHeures) {
+        this.dureeTotaleHeures = dureeTotaleHeures;
+    }
+
+    public Double getDureeOuvrableHeures() {
+        return dureeOuvrableHeures;
+    }
+
+    public void setDureeOuvrableHeures(Double dureeOuvrableHeures) {
+        this.dureeOuvrableHeures = dureeOuvrableHeures;
+    }
+
+    /**
+     * Retourne la durée totale formatée en "Xh YYmin"
+     */
+    public String getDureeTotaleFormatee() {
+        if (dureeTotaleHeures == null) return "";
+        int heures = dureeTotaleHeures.intValue();
+        int minutes = (int) Math.round((dureeTotaleHeures - heures) * 60);
+        return String.format("%dh %02dmin", heures, minutes);
+    }
+
+    /**
+     * Retourne la durée ouvrable formatée en "Xh YYmin"
+     */
+    public String getDureeOuvrableFormatee() {
+        if (dureeOuvrableHeures == null) return "";
+        int heures = dureeOuvrableHeures.intValue();
+        int minutes = (int) Math.round((dureeOuvrableHeures - heures) * 60);
+        return String.format("%dh %02dmin", heures, minutes);
     }
 }

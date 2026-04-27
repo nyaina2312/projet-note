@@ -12,6 +12,12 @@
     <div class="container">
         <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1>Liste des Demandes de Forage</h1>
+
+        <c:if test="${alertesNonLuesCount > 0}">
+            <div class="alert alert-warning">
+                ⚠️ <strong>${alertesNonLuesCount}</strong> alerte(s) de dépassement de délai
+            </div>
+        </c:if>
         
         <a href="/demandes/ajouter" class="btn btn-primary">Ajouter une Demande</a>
         
@@ -24,6 +30,7 @@
                     <th>District</th>
                     <th>Client</th>
                     <th>Statut</th>
+                    <th>Alerte</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -39,16 +46,23 @@
                                 ${demande.client.nom}
                             </c:if>
                         </td>
-                        <td>
-                            <c:set var="statut" value="${statutsMap[demande.id]}" />
-                            <c:if test="${statut != null}">
-                                <span class="badge badge-primary">${statut.libelle}</span>
-                            </c:if>
-                            <c:if test="${statut == null}">
-                                <span class="badge badge-warning">En attente</span>
-                            </c:if>
-                        </td>
-                        <td>
+                         <td>
+                             <c:set var="statut" value="${statutsMap[demande.id]}" />
+                             <c:if test="${statut != null}">
+                                 <span class="badge badge-primary">${statut.libelle}</span>
+                             </c:if>
+                             <c:if test="${statut == null}">
+                                 <span class="badge badge-warning">En attente</span>
+                             </c:if>
+                         </td>
+                         <td>
+                             <c:if test="${demandesAvecAlerte.contains(demande.id)}">
+                                 <span class="badge badge-danger" title="Délai de traitement dépassé le seuil (${seuilAlerteHeures}h)">
+                                     ⚠️ Délai dépassé
+                                 </span>
+                             </c:if>
+                         </td>
+                         <td>
                             <a href="/demandes/voir?id=${demande.id}" class="btn btn-sm">Voir</a>
                             <a href="/demandes/modifier?id=${demande.id}" class="btn btn-sm">Modifier</a>
                             <button type="button" class="btn btn-sm" onclick="changerStatutAvecObservation(${demande.id}, 2, 'Validé')">Confirmer</button>

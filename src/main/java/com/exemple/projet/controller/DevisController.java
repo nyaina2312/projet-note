@@ -53,7 +53,15 @@ public class DevisController {
         model.addAttribute("devisList", devisList);
         return "devis/liste";
     }
-    
+
+    /**
+     * Accès par /devis/{id} → redirige vers /devis/voir?id=...
+     */
+    @GetMapping("/{id}")
+    public String redirectToVoir(@PathVariable Integer id) {
+        return "redirect:/devis/voir?id=" + id;
+    }
+
     /**
      * Afficher le formulaire d'ajout de devis.
      */
