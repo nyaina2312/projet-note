@@ -2,6 +2,7 @@ package com.exemple.projet.service;
 
 import com.exemple.projet.model.Devis;
 import com.exemple.projet.model.DetailsDevis;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,5 +50,9 @@ public interface DevisService {
      * @param devisId ID du devis
      * @param statutId Nouveau statut ID
      */
-    void updateStatut(Integer devisId, Integer statutId);
+    void updateStatut(Integer devisId, Integer statutId);                  // Change le statut d'un devis (accepter/refuser)
+
+    List<DetailsDevis> findAllDetails();                                   // Récupère tous les détails de devis (pour la page CA)
+
+    BigDecimal getChiffreAffairesProvisionnel();                           // Calcule SUM de tous les montants (= chiffre d'affaires)
 }

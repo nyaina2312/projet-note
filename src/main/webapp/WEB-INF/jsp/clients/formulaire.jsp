@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1><c:if test="${client.id == null}">Ajouter</c:if><c:if test="${client.id != null}">Modifier</c:if> un Client</h1>
         
         <form action="/clients/sauvegarder" method="post">

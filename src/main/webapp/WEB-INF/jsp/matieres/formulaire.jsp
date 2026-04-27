@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1><c:if test="${matiere.idMatiere == null}">➕ Ajouter</c:if><c:if test="${matiere.idMatiere != null}">✏️ Modifier</c:if> une matière</h1>
         
         <form action="/matieres/sauvegarder" method="post">

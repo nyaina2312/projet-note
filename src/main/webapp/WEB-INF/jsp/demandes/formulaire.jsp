@@ -10,6 +10,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="etu-number"><span class="etu-prefix">ETU</span><span class="etu-id">003647</span></div>
         <h1><c:if test="${demande.id == null}">Ajouter</c:if><c:if test="${demande.id != null}">Modifier</c:if> une Demande</h1>
         
         <form action="/demandes/sauvegarder" method="post">
@@ -42,6 +43,13 @@
                 <label for="district">District:</label>
                 <input type="text" id="district" name="district" value="${demande.district}" required />
             </div>
+            
+            <c:if test="${demande.id != null}">
+            <div class="form-group">
+                <label for="observation">Observation (optionnel):</label>
+                <input type="text" id="observation" name="observation" placeholder="Justification de la modification" />
+            </div>
+            </c:if>
             
             <button type="submit" class="btn btn-primary">Sauvegarder</button>
             <a href="/demandes" class="btn btn-secondary">Annuler</a>

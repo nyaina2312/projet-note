@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+// Import ajouté pour le calcul du chiffre d'affaires provisionnel
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +53,15 @@ public class DevisController {
         model.addAttribute("devisList", devisList);
         return "devis/liste";
     }
-    
+
+    /**
+     * Accès par /devis/{id} → redirige vers /devis/voir?id=...
+     */
+    @GetMapping("/{id}")
+    public String redirectToVoir(@PathVariable Integer id) {
+        return "redirect:/devis/voir?id=" + id;
+    }
+
     /**
      * Afficher le formulaire d'ajout de devis.
      */
@@ -203,5 +213,20 @@ public class DevisController {
                                  @RequestParam Integer statutId) {
         devisService.updateStatut(devisId, statutId);
         return "redirect:/devis/voir/" + devisId;
+    }
+    
+    /**
+     * Page chiffre d'affaires provisionnel.
+     * Affiche l'ensemble des détails de devis avec leur montant,
+     * ainsi que la somme totale (chiffre d'affaires provisionnel).
+     * URL : GET /devis/chiffre-affaires
+     */
+    @GetMapping("/chiffre-affaires")                                       // Mappe cette méthode à l'URL GET /devis/chiffre-affaires
+    public String chiffreAffaires(Model model) {                           // Model = objet pour passer des données à la vue JSP
+        List<DetailsDevis> allDetails = devisService.findAllDetails();     // Récupère tous les détails depuis le service
+        BigDecimal totalCA = devisService.getChiffreAffairesProvisionnel();// Calcule la somme totale (SUM montant)
+        model.addAttribute("allDetails", allDetails);                     // Passe la liste des détails à la vue JSP (variable ${allDetails})
+        model.addAttribute("totalCA", totalCA);                           // Passe le total à la vue JSP (variable ${totalCA})
+        return "devis/chiffreAffaires";                                    // Retourne le nom de la vue → /WEB-INF/jsp/devis/chiffreAffaires.jsp
     }
 }
